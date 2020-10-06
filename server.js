@@ -134,9 +134,14 @@ function startEncoder( id, input_type, input, channel ){
 			'-i', blocks_config[id].source, // -i ":1"
 			'-map_channel', '0.0.'+channel,
 			//'-bufsize','32k',
-			'-q:a', '7',
+			//'-q:a', '7',
 			//'-b:a', '32k',
-			'-f','mpegts', 'udp://'+blockDest_ip+':'+blocks_config[id].port
+            '-hide_banner',
+			'-acodec', 'mp2', 
+			'-tune', 'zerolatency', 
+            '-ab', '96k',
+            '-ac', '1',
+			'-f','rtp', 'rtp://'+blockDest_ip+':'+blocks_config[id].port
 		];
         
 	} else {
@@ -171,7 +176,7 @@ function startEncoder( id, input_type, input, channel ){
 	proc.stderr.setEncoding("utf8")
 	proc.stderr.on('data', function(data) {
     	//console.log(data);
-        console.log('Encoder error');
+        //console.log('Encoder error');
 	});
 
 	proc.on('close', function() {
